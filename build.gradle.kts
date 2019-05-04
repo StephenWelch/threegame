@@ -1,5 +1,5 @@
-import org.gradle.internal.os.OperatingSystem
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.gradle.internal.os.OperatingSystem
 
 val lwjglVersion = "3.2.1"
 val jomlVersion = "1.9.14"
@@ -12,22 +12,18 @@ val lwjglNatives = when (OperatingSystem.current()) {
 }
 
 plugins {
+    kotlin("jvm") version "1.3.31"
     java
     idea
-    kotlin("jvm") version "1.3.31"
 }
 
 repositories {
     mavenCentral()
-    jcenter()
-    mavenLocal()
 }
 
 dependencies {
-    // Core dependencies
-    implementation(kotlin("stdlib"))
+    implementation(kotlin("stdlib-jdk8"))
 
-    // LWJGL + friends
     implementation("org.lwjgl", "lwjgl", lwjglVersion)
     implementation("org.lwjgl", "lwjgl-assimp", lwjglVersion)
     implementation("org.lwjgl", "lwjgl-bgfx", lwjglVersion)
@@ -98,4 +94,13 @@ dependencies {
     runtimeOnly("org.lwjgl", "lwjgl-yoga", lwjglVersion, classifier = lwjglNatives)
     runtimeOnly("org.lwjgl", "lwjgl-zstd", lwjglVersion, classifier = lwjglNatives)
     implementation("org.joml", "joml", jomlVersion)
+}
+
+val compileKotlin: KotlinCompile by tasks
+compileKotlin.kotlinOptions {
+    jvmTarget = "1.8"
+}
+val compileTestKotlin: KotlinCompile by tasks
+compileTestKotlin.kotlinOptions {
+    jvmTarget = "1.8"
 }
