@@ -17,14 +17,17 @@ class Game: Runnable {
         }
     }
 
+    var startLogic = 0.0
     fun logicUpdate() {
-        println("Update logic")
+        println("Logic dt: " + (1.0 / (Util.getSysTime() - startLogic)))
+        startLogic = Util.getSysTime()
     }
 
+    var startRender = 0.0
     fun renderUpdate() {
-        println("Update render")
+        println("Render dt: " + (1.0 / (Util.getSysTime() - startRender)))
+        startRender = Util.getSysTime()
     }
 
-    private fun getTime(): Long = System.currentTimeMillis()
 
 }
