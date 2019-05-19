@@ -10,11 +10,17 @@ class DummyGame : IGameLogic {
 
     private var direction = 0
     private var color = 0.0f
-    private val renderer = Renderer(Mesh(floatArrayOf(
-            0.0f, 0.5f, 0.0f,
+    private val renderer = Renderer(Mesh(
+        floatArrayOf(
+            -0.5f, 0.5f, 0.0f,
             -0.5f, -0.5f, 0.0f,
-            0.5f, -0.5f, 0.0f
-    )))
+            0.5f, -0.5f, 0.0f,
+            0.5f, 0.5f, 0.0f
+        ),
+        intArrayOf(
+            0, 1, 3, 3, 1, 2
+        )
+    ))
 
     override fun init() {}
     override fun input(window: GlfwWindow) {
