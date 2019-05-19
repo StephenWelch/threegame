@@ -39,7 +39,7 @@ class Renderer(val mesh: Mesh) {
 
     fun cleanup() {
         shaderProgram.cleanup()
-
+        mesh.cleanup()
     }
 
 }
