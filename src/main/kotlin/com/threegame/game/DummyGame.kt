@@ -2,6 +2,7 @@ package com.threegame.game
 
 import com.threegame.engine.GlfwWindow
 import com.threegame.engine.IGameLogic
+import com.threegame.engine.Mesh
 import org.lwjgl.glfw.GLFW.GLFW_KEY_DOWN
 import org.lwjgl.glfw.GLFW.GLFW_KEY_UP
 
@@ -9,7 +10,11 @@ class DummyGame : IGameLogic {
 
     private var direction = 0
     private var color = 0.0f
-    private val renderer = Renderer()
+    private val renderer = Renderer(Mesh(floatArrayOf(
+            0.0f, 0.5f, 0.0f,
+            -0.5f, -0.5f, 0.0f,
+            0.5f, -0.5f, 0.0f
+    )))
 
     override fun init() {}
     override fun input(window: GlfwWindow) {
