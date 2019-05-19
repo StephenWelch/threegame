@@ -17,6 +17,12 @@ class DummyGame : IGameLogic {
             0.5f, -0.5f, 0.0f,
             0.5f, 0.5f, 0.0f
         ),
+        floatArrayOf(
+            0.5f, 0.0f, 0.0f,
+            0.0f, 0.5f, 0.0f,
+            0.0f, 0.0f, 0.5f,
+            0.0f, 0.5f, 0.5f
+        ),
         intArrayOf(
             0, 1, 3, 3, 1, 2
         )

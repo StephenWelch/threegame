@@ -3,7 +3,7 @@ package com.threegame.game
 import com.threegame.engine.GlfwWindow
 import com.threegame.engine.Mesh
 import com.threegame.engine.ShaderProgram
-import org.lwjgl.opengl.GL11
+import org.lwjgl.opengl.GL20
 import org.lwjgl.opengl.GL30.*
 
 class Renderer(val mesh: Mesh) {
@@ -28,8 +28,9 @@ class Renderer(val mesh: Mesh) {
 
         glBindVertexArray(mesh.vaoId)
         glEnableVertexAttribArray(0)
+        GL20.glEnableVertexAttribArray(1)
 
-        GL11.glDrawElements(GL_TRIANGLES, mesh.vertexCount, GL_UNSIGNED_INT, 0)
+        glDrawElements(GL_TRIANGLES, mesh.vertexCount, GL_UNSIGNED_INT, 0)
 
         glDisableVertexAttribArray(0)
         glBindVertexArray(0)
