@@ -1,15 +1,15 @@
 package com.threegame.util
 
-import com.threegame.Util
-
 class SynchronousLoop(private val updateRateSeconds: Double, val loopFunction: () -> Unit, val getTime: () -> Double = { Util.getSysTime()}) {
 
     private var lastUpdate = getTime()
+    private var firstRun = true
 
     fun updateLoop() {
 
-        if(getTime() - lastUpdate >= updateRateSeconds) {
+        if(getTime() - lastUpdate >= updateRateSeconds || firstRun) {
             loopFunction()
+            firstRun = false
             lastUpdate = getTime()
         }
 
