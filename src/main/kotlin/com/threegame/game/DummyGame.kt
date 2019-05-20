@@ -48,13 +48,13 @@ class DummyGame : IGameLogic {
             transformDirection.add(0f, 0f, -1f)
         }
         if (window.isKeyPressed(GLFW_KEY_A)) {
-            transformDirection.add(1f, 0f, 0f)
+            transformDirection.add(-1f, 0f, 0f)
         }
         if (window.isKeyPressed(GLFW_KEY_S)) {
             transformDirection.add(0f, 0f, 1f)
         }
         if (window.isKeyPressed(GLFW_KEY_D)) {
-            transformDirection.add(-1f, 0f, 0f)
+            transformDirection.add(1f, 0f, 0f)
         }
         if(window.isKeyPressed(GLFW_KEY_LEFT_SHIFT)) {
             transformDirection.add(0f, -1f, 0f)
@@ -65,7 +65,7 @@ class DummyGame : IGameLogic {
     }
 
     override fun update(interval: Float) {
-        val rotAmt = Math.toRadians(20.0).toFloat()
+        val rotAmt = Math.toRadians(30.0).toFloat()
         val rotVec = Vector3f(rotAmt).mul(rotationDirection)
         val transAmt = 0.1f
         val transVec = Vector3f(transAmt).mul(transformDirection)
