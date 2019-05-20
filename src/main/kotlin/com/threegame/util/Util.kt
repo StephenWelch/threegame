@@ -13,6 +13,25 @@ class Util {
 
         @Throws(Exception::class)
         fun loadResource(fileName: String): String = File(fileName).inputStream().readBytes().toString(Charsets.UTF_8)
+
+        fun cube(length: Float, width: Float, height: Float): FloatArray = floatArrayOf(
+                // VO
+                -width / 2, height / 2, length / 2,
+                // V1
+                -width / 2, -height / 2, length / 2,
+                // V2
+                width / 2, -height / 2, length / 2,
+                // V3
+                width / 2, height / 2, length / 2,
+                // V4
+                -width / 2, height / 2, -length / 2,
+                // V5
+                width / 2, height / 2, -length / 2,
+                // V6
+                -width / 2, -height / 2, -length / 2,
+                // V7
+                width / 2, -height / 2, -length / 2
+        )
     }
 
 }

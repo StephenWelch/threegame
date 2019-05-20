@@ -54,6 +54,18 @@ class Mesh(val vertices: FloatArray, val colors: FloatArray, val indices: IntArr
         MemoryUtil.memFree(indexBuffer)
     }
 
+    fun render() {
+        glBindVertexArray(vaoId)
+        glEnableVertexAttribArray(0)
+        glEnableVertexAttribArray(1)
+
+        glDrawElements(GL_TRIANGLES, vertexCount, GL_UNSIGNED_INT, 0)
+
+        glDisableVertexAttribArray(0)
+        glDisableVertexAttribArray(1)
+        glBindVertexArray(0)
+    }
+
     fun cleanup() {
         glDisableVertexAttribArray(0)
 

@@ -59,6 +59,7 @@ class GlfwWindow(val title: String, var width: Int, var height: Int, val vsyncMo
 
         GL.createCapabilities()
 
+        glEnable(GL_DEPTH_TEST)
         clearColor(0.0f, 0.0f, 0.0f, 0.0f)
     }
 

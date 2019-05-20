@@ -1,30 +1,29 @@
 package com.threegame.game
 
+import com.threegame.engine.GameObject
 import com.threegame.engine.GlfwWindow
-import com.threegame.engine.Mesh
 import com.threegame.engine.ShaderProgram
-import org.joml.Matrix4f
-import org.lwjgl.opengl.GL20
-import org.lwjgl.opengl.GL30.*
+import com.threegame.engine.Transformation
+import org.lwjgl.opengl.GL30.glViewport
 
-class Renderer(val window: GlfwWindow, val mesh: Mesh) {
+class Renderer(vararg val gameObjects: GameObject) {
 
     val kFieldOfView: Float = Math.toRadians(60.0).toFloat()
     val kZNear: Float = 0.01f
     val kZFar: Float = 1000.0f
-    val aspectRatio: Float = (window.width / window.height).toFloat()
 
-    private val projectionMatrix = Matrix4f().perspective(kFieldOfView, aspectRatio, kZNear, kZFar)
+    val transformation = Transformation()
 
     private val shaderProgram: ShaderProgram
 
     init {
         shaderProgram = ShaderProgram("/home/stephen/code/personal/threegame/src/main/resources/vertex.vs", "/home/stephen/code/personal/threegame/src/main/resources/vertex.vs")
         shaderProgram.link()
+        shaderProgram.createUniform("projectionMatrix")
+        shaderProgram.createUniform("worldMatrix")
     }
 
     fun render(window: GlfwWindow) {
-//        println(GLFW.glfwGetCurrentContext())
         window.clear()
 
         if(window.resized) {
@@ -33,15 +32,12 @@ class Renderer(val window: GlfwWindow, val mesh: Mesh) {
         }
 
         shaderProgram.bind()
+        shaderProgram.setUniform("projectionMatrix", transformation.getProjectionMatrix(kFieldOfView, window.width.toFloat(), window.height.toFloat(), kZNear, kZFar))
 
-        glBindVertexArray(mesh.vaoId)
-        glEnableVertexAttribArray(0)
-        GL20.glEnableVertexAttribArray(1)
-
-        glDrawElements(GL_TRIANGLES, mesh.vertexCount, GL_UNSIGNED_INT, 0)
-
-        glDisableVertexAttribArray(0)
-        glBindVertexArray(0)
+        for(gameObject in gameObjects) {
+            shaderProgram.setUniform("worldMatrix", transformation.getWorldMatrix(gameObject.position, gameObject.rotation, gameObject.scale))
+            gameObject.mesh.render()
+        }
 
         shaderProgram.unbind()
 
@@ -49,7 +45,7 @@ class Renderer(val window: GlfwWindow, val mesh: Mesh) {
 
     fun cleanup() {
         shaderProgram.cleanup()
-        mesh.cleanup()
+        gameObjects.forEach { it.mesh.cleanup() }
     }
 
 }

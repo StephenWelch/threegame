@@ -1,7 +1,9 @@
 package com.threegame.engine
 
 import com.threegame.util.Util
+import org.joml.Matrix4f
 import org.lwjgl.opengl.GL20.*
+import org.lwjgl.system.MemoryStack
 
 class ShaderProgram(val vertexShaderPath: String, val fragmentShaderPath: String) {
 
@@ -55,6 +57,16 @@ class ShaderProgram(val vertexShaderPath: String, val fragmentShaderPath: String
         val uniformLocation = glGetUniformLocation(programId, uniformName)
         if(uniformLocation < 0) throw RuntimeException("Could not find uniform with name ${uniformLocation}.")
         uniforms[uniformName] = uniformLocation
+    }
+
+    fun setUniform(uniformName: String, value: Matrix4f) {
+        val stack = MemoryStack.stackPush()
+        stack.use {
+            // 4x4 matrix
+            val floatBuffer = it.mallocFloat(16)
+            value.get(floatBuffer)
+            glUniformMatrix4fv(uniforms[uniformName]!!, false, floatBuffer)
+        }
     }
 
     fun bind() = glUseProgram(programId)
