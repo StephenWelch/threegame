@@ -62,15 +62,15 @@ class DummyGame : IGameLogic {
             direction.add(-1f, 0f, 0f)
         }
         if (window.isKeyPressed(GLFW_KEY_LEFT)) {
-            direction.add(0f, -1f, 0f)
+            direction.add(0f, 1f, 0f)
         }
         if (window.isKeyPressed(GLFW_KEY_RIGHT)) {
-            direction.add(0f, 1f, 0f)
+            direction.add(0f, -1f, 0f)
         }
     }
 
     override fun update(interval: Float) {
-        val rotAmt = Math.toRadians(8.0).toFloat()
+        val rotAmt = Math.toRadians(20.0).toFloat()
         val rotVec = Vector3f(rotAmt).mul(direction)
         gameObject.rotation = gameObject.rotation.add(rotVec)
     }
