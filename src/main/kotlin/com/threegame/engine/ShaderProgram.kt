@@ -47,7 +47,7 @@ class ShaderProgram(val vertexShaderPath: String, val fragmentShaderPath: String
         if(fragmentShaderId != 0) glDetachShader(programId, fragmentShaderId)
 
         glValidateProgram(programId)
-        if(glGetProgrami(programId, GL_VALIDATE_STATUS) == 0) System.err.println("Warning validating Shader code: " + glGetProgramInfoLog(programId, 1024));
+        if(glGetProgrami(programId, GL_VALIDATE_STATUS) == 0) System.err.println("Warning validating Shader code: " + glGetProgramInfoLog(programId, 1024))
     }
 
     fun bind() = glUseProgram(programId)
