@@ -1,10 +1,11 @@
 package com.threegame.util
 
-import org.lwjgl.opengl.GL11
-import java.io.File
+import org.lwjgl.opengl.GL11.GL_FALSE
+import org.lwjgl.opengl.GL11.GL_TRUE
+import java.io.InputStream
 
 
-fun Boolean.glValue(): Int = if(this) GL11.GL_TRUE else GL11.GL_FALSE
+fun Boolean.glValue(): Int = if(this) GL_TRUE else GL_FALSE
 
 class Util {
 
@@ -12,7 +13,10 @@ class Util {
         fun getSysTime(): Double = System.currentTimeMillis() / 1000.0
 
         @Throws(Exception::class)
-        fun loadResource(fileName: String): String = File(fileName).inputStream().readBytes().toString(Charsets.UTF_8)
+        fun loadResourceAsString(fileName: String): String = loadResource(fileName).readBytes().toString(Charsets.UTF_8)
+        fun loadResource(fileName: String): InputStream {
+            return Util::class.java.classLoader.getResourceAsStream(fileName)
+        }
 
         fun cube(length: Float, width: Float, height: Float): FloatArray = floatArrayOf(
                 // VO

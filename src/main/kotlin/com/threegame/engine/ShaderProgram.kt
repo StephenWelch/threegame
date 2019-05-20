@@ -18,8 +18,8 @@ class ShaderProgram(val vertexShaderPath: String, val fragmentShaderPath: String
 
         if(programId == 0) throw RuntimeException("Could not create shader program.")
 
-        vertexShaderId = createVertexShader(Util.loadResource("/home/stephen/code/personal/threegame/src/main/resources/vertex.vs"))
-        fragmentShaderId = createFragmentShader(Util.loadResource("/home/stephen/code/personal/threegame/src/main/resources/fragment.fs"))
+        vertexShaderId = createVertexShader(Util.loadResourceAsString(vertexShaderPath))
+        fragmentShaderId = createFragmentShader(Util.loadResourceAsString(fragmentShaderPath))
     }
 
     private fun createVertexShader(shaderCode: String): Int = createShader(shaderCode, GL_VERTEX_SHADER)

@@ -17,7 +17,7 @@ class Renderer(vararg val gameObjects: GameObject) {
     private val shaderProgram: ShaderProgram
 
     init {
-        shaderProgram = ShaderProgram("/home/stephen/code/personal/threegame/src/main/resources/vertex.vs", "/home/stephen/code/personal/threegame/src/main/resources/vertex.vs")
+        shaderProgram = ShaderProgram("vertex.vs", "fragment.fs")
         shaderProgram.link()
         shaderProgram.createUniform("projectionMatrix")
         shaderProgram.createUniform("worldMatrix")
