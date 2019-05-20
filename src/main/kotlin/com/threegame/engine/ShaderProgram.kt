@@ -9,6 +9,7 @@ class ShaderProgram(val vertexShaderPath: String, val fragmentShaderPath: String
 
     private val vertexShaderId: Int
     private val fragmentShaderId:Int
+    private val uniforms: MutableMap<String, Int> = HashMap()
 
     init {
         programId = glCreateProgram()
@@ -48,6 +49,12 @@ class ShaderProgram(val vertexShaderPath: String, val fragmentShaderPath: String
 
         glValidateProgram(programId)
         if(glGetProgrami(programId, GL_VALIDATE_STATUS) == 0) System.err.println("Warning validating Shader code: " + glGetProgramInfoLog(programId, 1024))
+    }
+
+    fun createUniform(uniformName: String) {
+        val uniformLocation = glGetUniformLocation(programId, uniformName)
+        if(uniformLocation < 0) throw RuntimeException("Could not find uniform with name ${uniformLocation}.")
+        uniforms[uniformName] = uniformLocation
     }
 
     fun bind() = glUseProgram(programId)

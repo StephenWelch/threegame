@@ -3,12 +3,20 @@ package com.threegame.game
 import com.threegame.engine.GlfwWindow
 import com.threegame.engine.Mesh
 import com.threegame.engine.ShaderProgram
+import org.joml.Matrix4f
 import org.lwjgl.opengl.GL20
 import org.lwjgl.opengl.GL30.*
 
-class Renderer(val mesh: Mesh) {
+class Renderer(val window: GlfwWindow, val mesh: Mesh) {
 
-    val shaderProgram: ShaderProgram
+    val kFieldOfView: Float = Math.toRadians(60.0).toFloat()
+    val kZNear: Float = 0.01f
+    val kZFar: Float = 1000.0f
+    val aspectRatio: Float = (window.width / window.height).toFloat()
+
+    private val projectionMatrix = Matrix4f().perspective(kFieldOfView, aspectRatio, kZNear, kZFar)
+
+    private val shaderProgram: ShaderProgram
 
     init {
         shaderProgram = ShaderProgram("/home/stephen/code/personal/threegame/src/main/resources/vertex.vs", "/home/stephen/code/personal/threegame/src/main/resources/vertex.vs")
