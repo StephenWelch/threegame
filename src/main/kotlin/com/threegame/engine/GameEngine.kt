@@ -4,17 +4,17 @@ import com.threegame.util.SynchronousLoop
 
 class GameEngine(val window: GlfwWindow, val gameLogic: IGameLogic): Runnable {
 
-    val INPUT_UPDATE_RATE_S = 1.0 / 120.0
-    val LOGIC_UPDATE_RATE_S = 1.0 / 120.0
-    val RENDER_UPDATE_RATE_S = 1.0 / 60.0
+    val kInputUpdateRateS = 1.0 / 120.0
+    val kLogicUpdateRateS = 1.0 / 120.0
+    val kRenderUpdateRateS = 1.0 / 60.0
 
-    private val inputLoop = SynchronousLoop(INPUT_UPDATE_RATE_S, {
+    private val inputLoop = SynchronousLoop(kInputUpdateRateS, {
         gameLogic.input(window)
     })
-    private val logicLoop = SynchronousLoop(LOGIC_UPDATE_RATE_S, {
-        gameLogic.update(LOGIC_UPDATE_RATE_S.toFloat())
+    private val logicLoop = SynchronousLoop(kLogicUpdateRateS, {
+        gameLogic.update(kLogicUpdateRateS.toFloat())
     })
-    private val renderLoop = SynchronousLoop(RENDER_UPDATE_RATE_S, {
+    private val renderLoop = SynchronousLoop(kRenderUpdateRateS, {
         gameLogic.render(window)
         window.update()
     })
