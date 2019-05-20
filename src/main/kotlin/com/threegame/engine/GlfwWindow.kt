@@ -90,6 +90,11 @@ class GlfwWindow(val title: String, var width: Int, var height: Int, val vsyncMo
 
     fun shouldClose(): Boolean = glfwWindowShouldClose(windowHandle)
 
+    fun debugMode(): GlfwWindow {
+        glPolygonMode( GL_FRONT_AND_BACK, GL_LINE )
+        return this
+    }
+
     private fun handleKeyCallback(key: Int, action: Int) {
         print("Key " + key.toChar() + " Event")
         if(key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE) {
