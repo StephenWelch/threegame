@@ -21,6 +21,7 @@ class Renderer(vararg val gameObjects: GameObject) {
         shaderProgram.link()
         shaderProgram.createUniform("projectionMatrix")
         shaderProgram.createUniform("worldMatrix")
+        shaderProgram.createUniform("texture_sampler", 0)
     }
 
     fun render(window: GlfwWindow) {

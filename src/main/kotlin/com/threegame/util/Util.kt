@@ -1,6 +1,7 @@
 package com.threegame.util
 
 import com.threegame.engine.Mesh
+import com.threegame.engine.Texture
 import org.lwjgl.opengl.GL11.GL_FALSE
 import org.lwjgl.opengl.GL11.GL_TRUE
 import java.io.InputStream
@@ -19,53 +20,106 @@ class Util {
             return Util::class.java.classLoader.getResourceAsStream(fileName)
         }
 
-        fun cube(length: Float, width: Float, height: Float): Mesh {
+        fun cube(length: Float, texture: Texture): Mesh {
             val vertices = floatArrayOf(
-                    // VO
-                    -width / 2, height / 2, length / 2,
-                    // V1
-                    -width / 2, -height / 2, length / 2,
-                    // V2
-                    width / 2, -height / 2, length / 2,
-                    // V3
-                    width / 2, height / 2, length / 2,
-                    // V4
-                    -width / 2, height / 2, -length / 2,
-                    // V5
-                    width / 2, height / 2, -length / 2,
-                    // V6
-                    -width / 2, -height / 2, -length / 2,
-                    // V7
-                    width / 2, -height / 2, -length / 2
+                // V0
+                -length / 2, length / 2, length / 2,
+                // V1
+                -length / 2, -length / 2, length / 2,
+                // V2
+                length / 2, -length / 2, length / 2,
+                // V3
+                length / 2, length / 2, length / 2,
+                // V4
+                -length / 2, length / 2, -length / 2,
+                // V5
+                length / 2, length / 2, -length / 2,
+                // V6
+                -length / 2, -length / 2, -length / 2,
+                // V7
+                length / 2, -length / 2, -length / 2,
+
+                // For text coords in top face
+                // V8: V4 repeated
+                -length / 2, length / 2, -length / 2,
+                // V9: V5 repeated
+                length / 2, length / 2, -length / 2,
+                // V10: V0 repeated
+                -length / 2, length / 2, length / 2,
+                // V11: V3 repeated
+                length / 2, length / 2, length / 2,
+
+                // For text coords in right face
+                // V12: V3 repeated
+                length / 2, length / 2, length / 2,
+                // V13: V2 repeated
+                length / 2, -length / 2, length / 2,
+
+                // For text coords in left face
+                // V14: V0 repeated
+                -length / 2, length / 2, length / 2,
+                // V15: V1 repeated
+                -length / 2, -length / 2, length / 2,
+
+                // For text coords in bottom face
+                // V16: V6 repeated
+                -length / 2, -length / 2, -length / 2,
+                // V17: V7 repeated
+                length / 2, -length / 2, -length / 2,
+                // V18: V1 repeated
+                -length / 2, -length / 2, length / 2,
+                // V19: V2 repeated
+                length / 2, -length / 2, length / 2
             )
 
-            val colors = floatArrayOf(
-                    1.0f, 1.0f, 1.0f,
-                    1.0f, 1.0f, 1.0f,
-                    1.0f, 1.0f, 1.0f,
-                    1.0f, 1.0f, 1.0f,
-                    1.0f, 1.0f, 1.0f,
-                    1.0f, 1.0f, 1.0f,
-                    1.0f, 1.0f, 1.0f,
-                    1.0f, 1.0f, 1.0f
+            val textureCoords = floatArrayOf(
+                    0.0f, 0.0f,
+                    0.0f, length / 2,
+                    length / 2, length / 2,
+                    length / 2, 0.0f,
+
+                    0.0f, 0.0f,
+                    length / 2, 0.0f,
+                    0.0f, length / 2,
+                    length / 2, length / 2,
+
+                    // For text coords in top face
+                    0.0f, length / 2,
+                    length / 2, length / 2,
+                    0.0f, 1.0f,
+                    length / 2, 1.0f,
+
+                    // For text coords in right face
+                    0.0f, 0.0f,
+                    0.0f, length / 2,
+
+                    // For text coords in left face
+                    length / 2, 0.0f,
+                    length / 2, length / 2,
+
+                    // For text coords in bottom face
+                    length / 2, 0.0f,
+                    1.0f, 0.0f,
+                    length / 2, length / 2,
+                    1.0f, length / 2
             )
 
             val indices = intArrayOf(
                     // Front face
                     0, 1, 3, 3, 1, 2,
                     // Top Face
-                    4, 0, 3, 5, 4, 3,
+                    8, 10, 11, 9, 8, 11,
                     // Right face
-                    3, 2, 7, 5, 3, 7,
+                    12, 13, 7, 5, 12, 7,
                     // Left face
-                    6, 1, 0, 6, 0, 4,
+                    14, 15, 6, 4, 14, 6,
                     // Bottom face
-                    2, 1, 6, 2, 6, 7,
+                    16, 18, 19, 17, 16, 19,
                     // Back face
-                    7, 6, 4, 7, 4, 5
+                    4, 6, 7, 5, 4, 7
             )
 
-            return Mesh(vertices, colors, indices)
+            return Mesh(vertices, textureCoords, indices, texture)
         }
     }
 

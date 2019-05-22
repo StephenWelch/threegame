@@ -1,60 +1,61 @@
 package com.threegame.engine
 
-import org.lwjgl.opengl.GL15.glBindBuffer
-import org.lwjgl.opengl.GL15.glDeleteBuffers
-import org.lwjgl.opengl.GL20.glDisableVertexAttribArray
+import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL30.*
 import org.lwjgl.system.MemoryUtil
 import java.nio.FloatBuffer
 import java.nio.IntBuffer
 
-class Mesh(val vertices: FloatArray, val colors: FloatArray, val indices: IntArray) {
+class Mesh(val vertices: FloatArray, val textureCoords: FloatArray, val indices: IntArray, val texture: Texture) {
 
     val vaoId: Int
-    val vboId: Int
-    val colorVboId: Int
-    val indexVboId: Int
+    val vboIds: MutableList<Int>
 
     val vertexCount = indices.size
 
     init {
         // Allocate off-heap memory
         val vertexBuffer: FloatBuffer = MemoryUtil.memAllocFloat(vertices.size)
-        val colorBuffer: FloatBuffer = MemoryUtil.memAllocFloat(colors.size)
+        val textureBuffer: FloatBuffer = MemoryUtil.memAllocFloat(textureCoords.size)
         val indexBuffer: IntBuffer = MemoryUtil.memAllocInt(indices.size)
 
         // Put vertices in the buffers, reset buffer index to 0
         vertexBuffer.put(vertices).flip()
-        colorBuffer.put(colors).flip()
+        textureBuffer.put(textureCoords).flip()
         indexBuffer.put(indices).flip()
 
         vaoId = glGenVertexArrays()
         glBindVertexArray(vaoId)
 
-        vboId = glGenBuffers()
+        var vboId = glGenBuffers()
         glBindBuffer(GL_ARRAY_BUFFER, vboId)
         glBufferData(GL_ARRAY_BUFFER, vertexBuffer, GL_STATIC_DRAW)
         glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0)
 
-        colorVboId = glGenBuffers()
-        glBindBuffer(GL_ARRAY_BUFFER, colorVboId)
-        glBufferData(GL_ARRAY_BUFFER, colorBuffer, GL_STATIC_DRAW)
-        glVertexAttribPointer(1, 3, GL_FLOAT, false, 0, 0)
+        var textureVboId = glGenBuffers()
+        glBindBuffer(GL_ARRAY_BUFFER, textureVboId)
+        glBufferData(GL_ARRAY_BUFFER, textureBuffer, GL_STATIC_DRAW)
+        glVertexAttribPointer(1, 2, GL_FLOAT, false, 0, 0)
 
-        indexVboId = glGenBuffers()
+        var indexVboId = glGenBuffers()
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexVboId)
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexBuffer, GL_STATIC_DRAW)
+
+        vboIds = arrayListOf(vboId, textureVboId, indexVboId)
 
         // Unbind everything
         glBindBuffer(GL_ARRAY_BUFFER, 0)
         glBindVertexArray(0)
 
         MemoryUtil.memFree(vertexBuffer)
-        MemoryUtil.memFree(colorBuffer)
+        MemoryUtil.memFree(textureBuffer)
         MemoryUtil.memFree(indexBuffer)
     }
 
     fun render() {
+        glActiveTexture(GL_TEXTURE0)
+        glBindTexture(GL11.GL_TEXTURE_2D, texture.id)
+
         glBindVertexArray(vaoId)
         glEnableVertexAttribArray(0)
         glEnableVertexAttribArray(1)
@@ -70,9 +71,7 @@ class Mesh(val vertices: FloatArray, val colors: FloatArray, val indices: IntArr
         glDisableVertexAttribArray(0)
 
         glBindBuffer(GL_ARRAY_BUFFER, 0)
-        glDeleteBuffers(vboId)
-        glDeleteBuffers(colorVboId)
-        glDeleteBuffers(indexVboId)
+        vboIds.forEach(::glDeleteBuffers)
 
         glBindVertexArray(0)
         glDeleteVertexArrays(vaoId)

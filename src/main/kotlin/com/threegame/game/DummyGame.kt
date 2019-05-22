@@ -3,6 +3,7 @@ package com.threegame.game
 import com.threegame.engine.GameObject
 import com.threegame.engine.GlfwWindow
 import com.threegame.engine.IGameLogic
+import com.threegame.engine.Texture
 import com.threegame.util.Util
 import org.joml.Vector3f
 import org.lwjgl.glfw.GLFW.*
@@ -16,7 +17,7 @@ class DummyGame : IGameLogic {
     private val renderer: Renderer
 
     init {
-        val mesh = Util.cube(1f, 1f, 1f)
+        val mesh = Util.cube(1f, Texture("grassblock.png"))
         gameObject = GameObject(
                 mesh,
                 Vector3f(0f, 0f, -2f)

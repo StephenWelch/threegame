@@ -59,6 +59,15 @@ class ShaderProgram(val vertexShaderPath: String, val fragmentShaderPath: String
         uniforms[uniformName] = uniformLocation
     }
 
+    fun createUniform(uniformName: String, value: Int) {
+        createUniform(uniformName)
+        setUniform(uniformName, value)
+    }
+
+    fun setUniform(uniformName: String, value: Int) {
+        glUniform1i(uniforms[uniformName]!!, value)
+    }
+
     fun setUniform(uniformName: String, value: Matrix4f) {
         val stack = MemoryStack.stackPush()
         stack.use {

@@ -7,7 +7,7 @@ import com.threegame.game.DummyGame
 fun main() {
 
     Thread {
-        val window = GlfwWindow("Game", 600, 480, GlfwWindow.VsyncMode.NONE, false).debugMode()
+        val window = GlfwWindow("Game", 600, 480, GlfwWindow.VsyncMode.NONE, false)
         val game = DummyGame()
         val engine = GameEngine(window, game)
 
