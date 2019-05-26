@@ -1,19 +1,19 @@
 package com.threegame.game
 
-import com.threegame.engine.GameObject
-import com.threegame.engine.GlfwWindow
-import com.threegame.engine.IGameLogic
-import com.threegame.engine.Texture
+import com.threegame.engine.*
 import com.threegame.util.Util
 import org.joml.Vector3f
 import org.lwjgl.glfw.GLFW.*
 
 class DummyGame : IGameLogic {
 
-    private var rotationDirection = Vector3f()
+    private val ROTATION_SENSITIVTY = Vector3f(0.5f, 0.5f, 0.5f)
+    private val MOVE_AMOUNT = 0.1f
+
+    private var rotAmt = Vector3f()
     private var transformDirection = Vector3f()
-    private var color = 0.0f
     private val gameObject: GameObject
+    private val camera: Camera = FpsCamera()
     private val renderer: Renderer
 
     init {
@@ -22,56 +22,46 @@ class DummyGame : IGameLogic {
                 mesh,
                 Vector3f(0f, 0f, -2f)
         )
-        renderer = Renderer(gameObject)
+        renderer = Renderer(camera, gameObject)
     }
 
     override fun init() {
 
     }
 
-    override fun input(window: GlfwWindow) {
-        rotationDirection = Vector3f(0f, 0f, 0f)
-        if (window.isKeyPressed(GLFW_KEY_UP)) {
-            rotationDirection.add(1f, 0f, 0f)
-        }
-        if (window.isKeyPressed(GLFW_KEY_DOWN)) {
-            rotationDirection.add(-1f, 0f, 0f)
-        }
-        if (window.isKeyPressed(GLFW_KEY_LEFT)) {
-            rotationDirection.add(0f, 1f, 0f)
-        }
-        if (window.isKeyPressed(GLFW_KEY_RIGHT)) {
-            rotationDirection.add(0f, -1f, 0f)
+    override fun input(window: GlfwWindow, mouseInput: MouseInput) {
+
+        rotAmt.set(0f, 0f, 0f)
+        if(mouseInput.leftButton) {
+            rotAmt.set(Vector3f(mouseInput.mouseDelta.y, mouseInput.mouseDelta.x, 0f))
         }
 
         transformDirection = Vector3f(0f, 0f, 0f)
         if (window.isKeyPressed(GLFW_KEY_W)) {
-            transformDirection.add(0f, 0f, -1f)
+            transformDirection.z = -1f
         }
         if (window.isKeyPressed(GLFW_KEY_A)) {
-            transformDirection.add(-1f, 0f, 0f)
+            transformDirection.x = -1f
         }
         if (window.isKeyPressed(GLFW_KEY_S)) {
-            transformDirection.add(0f, 0f, 1f)
+            transformDirection.z = 1f
         }
         if (window.isKeyPressed(GLFW_KEY_D)) {
-            transformDirection.add(1f, 0f, 0f)
+            transformDirection.x = 1f
         }
         if(window.isKeyPressed(GLFW_KEY_LEFT_SHIFT)) {
-            transformDirection.add(0f, -1f, 0f)
+            transformDirection.y = -1f
         }
         if(window.isKeyPressed(GLFW_KEY_SPACE)) {
-            transformDirection.add(0f, 1f, 0f)
+            transformDirection.y = 1f
         }
     }
 
-    override fun update(interval: Float) {
-        val rotAmt = Math.toRadians(30.0).toFloat()
-        val rotVec = Vector3f(rotAmt).mul(rotationDirection)
-        val transAmt = 0.1f
-        val transVec = Vector3f(transAmt).mul(transformDirection)
-        gameObject.rotation = gameObject.rotation.add(rotVec)
-        gameObject.position = gameObject.position.add(transVec)
+    override fun update(interval: Float, mouseInput: MouseInput) {
+        val rotVec = Vector3f(rotAmt).mul(ROTATION_SENSITIVTY)
+        val transVec = Vector3f(MOVE_AMOUNT).mul(transformDirection)
+        camera.rotation.add(rotVec)
+        camera.position.add(transVec)
     }
 
     override fun render(window: GlfwWindow) {

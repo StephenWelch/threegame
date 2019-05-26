@@ -121,6 +121,13 @@ class Util {
 
             return Mesh(vertices, textureCoords, indices, texture)
         }
+
+        fun sinf(value: Float) = Math.sin(value.toDouble()).toFloat()
+        fun cosf(value: Float) = Math.cos(value.toDouble()).toFloat()
+        fun tanf(value: Float) = Math.tan(value.toDouble()).toFloat()
+        fun toRadiansf(value: Float) = Math.toRadians(value.toDouble()).toFloat()
+
+
     }
 
 }
